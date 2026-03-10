@@ -10,13 +10,12 @@ if not os.path.exists(bg_path):
     exit(1)
 
 bg_img = Image.open(bg_path)
-# Reduced from 1056x746 q75 to 528x373 q50 to cut memory 4x for mobile html2canvas
-# CSS background-size:cover upscales it — visual quality stays identical
-bg_img = bg_img.resize((528, 373), Image.Resampling.LANCZOS)
+# Full resolution for vibrant, high-quality desktop display and export
+bg_img = bg_img.resize((1056, 746), Image.Resampling.LANCZOS)
 bg_buffer = io.BytesIO()
 if bg_img.mode in ('RGBA', 'P'):
     bg_img = bg_img.convert('RGB')
-bg_img.save(bg_buffer, format="JPEG", quality=50)
+bg_img.save(bg_buffer, format="JPEG", quality=85)
 bg_b64 = base64.b64encode(bg_buffer.getvalue()).decode("utf-8")
 bg_data_uri = f"data:image/jpeg;base64,{bg_b64}"
 
@@ -451,70 +450,55 @@ html_content = f"""<!DOCTYPE html>
       const originalText = btn.innerText;
       const resetBtn = () => {{ btn.innerText = originalText; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; }};
 
-      btn.innerText = 'Generating...';
+      // Mobile: show message instead of attempting export
+      const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 768;
+      if (isMobile) {{
+        alert('For the best quality export, please open this certificate on a desktop or laptop browser and click Download.');
+        return;
+      }}
+
+      btn.innerText = 'Generating high-quality PNG...';
       btn.style.opacity = '0.7';
       btn.style.pointerEvents = 'none';
 
       try {{
-        await document.fonts.ready;
-
-        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 768;
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-        // Mobile: 1x scale + JPEG = minimal memory (~2MB total)
-        // Desktop: 4x scale + PNG = ultra print quality
-        const exportScale = isMobile ? 1 : 4;
-        const exportFormat = isMobile ? 'image/jpeg' : 'image/png';
-        const exportQuality = isMobile ? 0.92 : 1.0;
-        const exportExt = isMobile ? 'jpg' : 'png';
-
         const cert = document.getElementById('certificate');
+        await document.fonts.ready;
+        await new Promise(r => setTimeout(r, 300));
+
         const canvas = await html2canvas(cert, {{
-          scale: exportScale,
+          scale: 4,
           useCORS: true,
-          allowTaint: true,
           backgroundColor: '#fffaf0',
           logging: false,
-          imageTimeout: 0,
+          letterRendering: 1,
           onclone: function(clonedDoc) {{
             var sw = clonedDoc.getElementById('scaleWrapper');
             if (sw) {{ sw.style.transform = 'none'; sw.style.marginBottom = '0'; }}
           }}
         }});
 
-        // Convert canvas to blob using Promise for proper error handling
         const blob = await new Promise(function(resolve, reject) {{
-          try {{
-            canvas.toBlob(function(b) {{
-              if (b) resolve(b);
-              else reject(new Error('Blob conversion failed'));
-            }}, exportFormat, exportQuality);
-          }} catch(e) {{
-            reject(e);
-          }}
+          canvas.toBlob(function(b) {{
+            if (b) resolve(b);
+            else reject(new Error('Blob conversion failed'));
+          }}, 'image/png', 1.0);
         }});
 
         const blobUrl = URL.createObjectURL(blob);
-
-        if (isIOS) {{
-          // iOS Safari: navigate to blob URL, user long-presses to save
-          window.location.href = blobUrl;
-        }} else {{
-          // Android + Desktop: standard download
-          var a = document.createElement('a');
-          a.href = blobUrl;
-          a.download = 'certificate.' + exportExt;
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
-          setTimeout(function() {{ document.body.removeChild(a); URL.revokeObjectURL(blobUrl); }}, 2000);
-        }}
+        var a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'certificate.png';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {{ document.body.removeChild(a); URL.revokeObjectURL(blobUrl); }}, 2000);
 
         resetBtn();
 
       }} catch (err) {{
         console.error('Download error:', err);
-        alert('Download failed: ' + err.message + '. Try using a desktop browser.');
+        alert('Export failed: ' + err.message);
         resetBtn();
       }}
     }});
