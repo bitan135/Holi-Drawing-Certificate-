@@ -396,7 +396,7 @@ html_content = f"""<!DOCTYPE html>
 """
 
 # Write HTML content to the file
-output_path = "/Users/bitanbiswas/Documents/Antigravety Projects/Holi Drawing Certificate/certificate.html"
+output_path = "/Users/bitanbiswas/Documents/Antigravety Projects/Holi Drawing Certificate/index.html"
 with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
