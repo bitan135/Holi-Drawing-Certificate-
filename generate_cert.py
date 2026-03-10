@@ -150,12 +150,12 @@ html_content = f"""<!DOCTYPE html>
     left: 72px; 
     width: 90px; 
     height: 90px;
-    object-fit: cover; /* Fit completely inside the circle without gaps */
+    object-fit: contain; /* Ensure the entire logo is safely visible */
     object-position: center;
-    background: transparent; 
+    background: rgba(255, 255, 255, 0.9); /* Solid white backing inside the ring */
     border: 3px solid #c8960c; /* Premium gold ring */
     border-radius: 50%;
-    padding: 0; /* Removing padding makes it feel like a professional seal */
+    padding: 6px; /* Add padding so logo doesn't touch the ring */
     box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,250,240,0.4);
     z-index: 25;
   }}
