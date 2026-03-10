@@ -447,17 +447,26 @@ html_content = f"""<!DOCTYPE html>
     document.getElementById('downloadBtn').addEventListener('click', async () => {{
       const btn = document.getElementById('downloadBtn');
       const originalText = btn.innerText;
-      btn.innerText = "Generating PNG... (This may take a moment)";
+      btn.innerText = "Generating PNG...";
       btn.style.opacity = "0.7";
       btn.style.pointerEvents = "none";
+
+      const resetBtn = () => {{
+        btn.innerText = originalText;
+        btn.style.opacity = "1";
+        btn.style.pointerEvents = "auto";
+      }};
 
       try {{
         const cert = document.getElementById('certificate');
         await document.fonts.ready;
-        await new Promise(resolve => setTimeout(resolve, 300));
+        await new Promise(r => setTimeout(r, 200));
 
-        const isMobile = window.innerWidth <= 768;
-        const exportScale = isMobile ? 2.5 : 4;
+        // Detect device capabilities
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        // Mobile: 2x is safe (3174x2246). Desktop: 4x for print quality.
+        const exportScale = isMobile ? 2 : 4;
 
         const canvas = await html2canvas(cert, {{
           scale: exportScale,
@@ -474,27 +483,44 @@ html_content = f"""<!DOCTYPE html>
           }}
         }});
 
-        canvas.toBlob((blob) => {{
-          if (!blob) throw new Error("Canvas to Blob failed.");
-          const blobUrl = URL.createObjectURL(blob);
+        // Wrap toBlob in a Promise for proper async error handling
+        const blob = await new Promise((resolve, reject) => {{
+          canvas.toBlob((b) => {{
+            if (b) resolve(b);
+            else reject(new Error("Canvas to Blob conversion failed."));
+          }}, 'image/png');
+        }});
+
+        const blobUrl = URL.createObjectURL(blob);
+
+        if (isIOS) {{
+          // iOS Safari doesn't support <a download>. Open in new tab instead.
+          const win = window.open(blobUrl, '_blank');
+          if (!win) {{
+            // Popup blocked — fall back to same-tab navigation
+            window.location.href = blobUrl;
+          }}
+          // Delay cleanup so user can save from the new tab
+          setTimeout(() => URL.revokeObjectURL(blobUrl), 60000);
+        }} else {{
+          // Standard download for Android/Desktop
           const link = document.createElement('a');
           link.download = 'certificate.png';
           link.href = blobUrl;
           document.body.appendChild(link);
           link.click();
-          setTimeout(() => {{ document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }}, 100);
+          setTimeout(() => {{
+            document.body.removeChild(link);
+            URL.revokeObjectURL(blobUrl);
+          }}, 500);
+        }}
 
-          btn.innerText = originalText;
-          btn.style.opacity = "1";
-          btn.style.pointerEvents = "auto";
-        }}, 'image/png', 1.0);
+        resetBtn();
 
       }} catch (err) {{
-        console.error(err);
-        alert("Error generating PNG. Check console.");
-        btn.innerText = originalText;
-        btn.style.opacity = "1";
-        btn.style.pointerEvents = "auto";
+        console.error("PNG generation error:", err);
+        alert("Could not generate the certificate image. Please try again.");
+        resetBtn();
       }}
     }});
   </script>
