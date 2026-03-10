@@ -18,58 +18,36 @@ bg_img.save(bg_buffer, format="JPEG", quality=75)
 bg_b64 = base64.b64encode(bg_buffer.getvalue()).decode("utf-8")
 bg_data_uri = f"data:image/jpeg;base64,{bg_b64}"
 
-# 2. Logo Image for base64 injection
-logo_path = "/Users/bitanbiswas/.gemini/antigravity/brain/7801b942-32ca-46e3-aee4-792673f45c28/media__1773160432503.png"
-logo_data_uri = ""
-if os.path.exists(logo_path):
-    logo_img = Image.open(logo_path)
-    logo_img = logo_img.resize((200, 200), Image.Resampling.LANCZOS)
-    logo_buffer = io.BytesIO()
-    logo_img.save(logo_buffer, format="PNG")
-    logo_b64 = base64.b64encode(logo_buffer.getvalue()).decode("utf-8")
-    logo_data_uri = f"data:image/png;base64,{logo_b64}"
-
-# 3. Intricate Traditional Alpona SVG Borders
-# Horizontal motif: lotus petals with paisley curves, multiple layers
+# 2. Intricate Traditional Alpona SVG Borders (Base64 encoded for html2canvas)
 svg_h = """<svg width="80" height="28" viewBox="0 0 80 28" xmlns="http://www.w3.org/2000/svg">
-  <!-- Outer paisley leaf -->
   <path d="M0,14 C10,2 20,2 30,14 C20,26 10,26 0,14 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
   <path d="M5,14 C12,6 18,6 25,14 C18,22 12,22 5,14 Z" fill="#e8b030" opacity="0.3"/>
-  <!-- Center lotus bud -->
   <ellipse cx="15" cy="14" rx="4" ry="6" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
   <circle cx="15" cy="14" r="2" fill="#7a0030" opacity="0.5"/>
-  <!-- Second paisley, mirrored -->
   <path d="M40,14 C50,2 60,2 70,14 C60,26 50,26 40,14 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
   <path d="M45,14 C52,6 58,6 65,14 C58,22 52,22 45,14 Z" fill="#e8b030" opacity="0.3"/>
   <ellipse cx="55" cy="14" rx="4" ry="6" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
   <circle cx="55" cy="14" r="2" fill="#7a0030" opacity="0.5"/>
-  <!-- Connecting dots -->
   <circle cx="35" cy="14" r="2.5" fill="#c8960c" opacity="0.8"/>
   <circle cx="35" cy="6" r="1" fill="#7a0030" opacity="0.5"/>
   <circle cx="35" cy="22" r="1" fill="#7a0030" opacity="0.5"/>
-  <!-- Fine gold lines top and bottom -->
   <line x1="0" y1="1" x2="80" y2="1" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
   <line x1="0" y1="27" x2="80" y2="27" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
 </svg>"""
 alpona_h_uri = f"data:image/svg+xml;base64,{base64.b64encode(svg_h.encode('utf-8')).decode('utf-8')}"
 
-# Vertical motif: rotated version of horizontal
 svg_v = """<svg width="28" height="80" viewBox="0 0 28 80" xmlns="http://www.w3.org/2000/svg">
-  <!-- Outer paisley leaf vertical -->
   <path d="M14,0 C2,10 2,20 14,30 C26,20 26,10 14,0 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
   <path d="M14,5 C6,12 6,18 14,25 C22,18 22,12 14,5 Z" fill="#e8b030" opacity="0.3"/>
   <ellipse cx="14" cy="15" rx="6" ry="4" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
   <circle cx="14" cy="15" r="2" fill="#7a0030" opacity="0.5"/>
-  <!-- Second paisley vertical -->
   <path d="M14,40 C2,50 2,60 14,70 C26,60 26,50 14,40 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
   <path d="M14,45 C6,52 6,58 14,65 C22,58 22,52 14,45 Z" fill="#e8b030" opacity="0.3"/>
   <ellipse cx="14" cy="55" rx="6" ry="4" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
   <circle cx="14" cy="55" r="2" fill="#7a0030" opacity="0.5"/>
-  <!-- Connecting dots -->
   <circle cx="14" cy="35" r="2.5" fill="#c8960c" opacity="0.8"/>
   <circle cx="6" cy="35" r="1" fill="#7a0030" opacity="0.5"/>
   <circle cx="22" cy="35" r="1" fill="#7a0030" opacity="0.5"/>
-  <!-- Fine gold lines left and right -->
   <line x1="1" y1="0" x2="1" y2="80" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
   <line x1="27" y1="0" x2="27" y2="80" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
 </svg>"""
@@ -86,11 +64,11 @@ html_content = f"""<!DOCTYPE html>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;900&family=Noto+Sans+Bengali:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-  @page {{{{
+  @page {{
     size: 297mm 210mm landscape;
     margin: 0;
-  }}}}
-  body {{{{
+  }}
+  body {{
     margin: 0;
     padding: 20px 0 40px 0;
     background-color: #1a1a1a;
@@ -98,10 +76,10 @@ html_content = f"""<!DOCTYPE html>
     flex-direction: column;
     align-items: center;
     font-family: 'Noto Sans Bengali', sans-serif;
-  }}}}
-  
+  }}
+
   /* Toggle Controls */
-  .controls-wrapper {{{{
+  .controls-wrapper {{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,8 +90,8 @@ html_content = f"""<!DOCTYPE html>
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 100;
-  }}}}
-  .toggle-type-btn {{{{
+  }}
+  .toggle-type-btn {{
     background: transparent;
     border: 2px solid #c8960c;
     color: #c8960c;
@@ -124,96 +102,91 @@ html_content = f"""<!DOCTYPE html>
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.2s ease;
-  }}}}
-  .toggle-type-btn.active {{{{
+  }}
+  .toggle-type-btn.active {{
     background: linear-gradient(135deg, #c8960c, #f5d060, #c8960c);
     color: #3a1500;
     box-shadow: 0 4px 12px rgba(200,150,12,0.4);
     border-color: transparent;
-  }}}}
+  }}
 
   /* Scaling wrapper */
-  .scale-wrapper {{{{
+  .scale-wrapper {{
     width: 1587px;
     height: 1123px;
     transform-origin: top center;
-  }}}}
+  }}
 
-  /* ═══════════════ CERTIFICATE MAIN ═══════════════ */
-  #certificate {{{{
+  /* ═══ CERTIFICATE ═══ */
+  #certificate {{
     width: 1587px;
     height: 1123px;
     position: relative;
     background-color: #fffaf0;
     overflow: hidden;
     box-sizing: border-box;
-  }}}}
+  }}
 
   /* ── MULTI-LAYER BORDER SYSTEM ── */
-  /* Layer 1: Outermost thick gold border */
-  .border-outer {{{{
+  .border-outer {{
     position: absolute;
     inset: 0;
     border: 10px solid #b8860b;
     z-index: 5;
     pointer-events: none;
-  }}}}
-  /* Layer 2: Cream gap */
-  .border-cream {{{{
+  }}
+  .border-cream {{
     position: absolute;
     inset: 10px;
     border: 4px solid #fffdf5;
     z-index: 6;
     pointer-events: none;
-  }}}}
-  /* Layer 3: Thin inner gold line */
-  .border-inner-gold {{{{
+  }}
+  .border-inner-gold {{
     position: absolute;
     inset: 14px;
     border: 2px solid #c8960c;
     z-index: 7;
     pointer-events: none;
-  }}}}
-  /* Layer 4: Alpona ornamental strip (SVG repeating background) */
-  .alpona-strip {{{{
+  }}
+  .alpona-strip {{
     position: absolute;
     inset: 20px;
     z-index: 8;
     pointer-events: none;
-  }}}}
-  .alpona-edge {{{{
+  }}
+  .alpona-edge {{
     position: absolute;
     background-repeat: repeat;
-  }}}}
-  .alpona-top, .alpona-bottom {{{{
+  }}
+  .alpona-top, .alpona-bottom {{
     left: 0; right: 0;
     height: 28px;
     background-image: url("{alpona_h_uri}");
     background-size: 80px 28px;
     background-repeat: repeat-x;
-  }}}}
-  .alpona-left, .alpona-right {{{{
+  }}
+  .alpona-left, .alpona-right {{
     top: 0; bottom: 0;
     width: 28px;
     background-image: url("{alpona_v_uri}");
     background-size: 28px 80px;
     background-repeat: repeat-y;
-  }}}}
-  .alpona-top  {{{{ top: 0; }}}}
-  .alpona-bottom {{{{ bottom: 0; }}}}
-  .alpona-left {{{{ left: 0; }}}}
-  .alpona-right {{{{ right: 0; }}}}
-  /* Layer 5: Innermost fine crimson line */
-  .border-inner-crimson {{{{
+  }}
+  .alpona-top  {{ top: 0; }}
+  .alpona-bottom {{ bottom: 0; }}
+  .alpona-left {{ left: 0; }}
+  .alpona-right {{ right: 0; }}
+  .border-inner-crimson {{
     position: absolute;
     inset: 48px;
     border: 1px solid rgba(122,0,48,0.35);
     z-index: 9;
     pointer-events: none;
-  }}}}
+  }}
 
   /* Corner Ornaments */
-  .corner-ornament {{{{
+  .corner-ornament {{
     position: absolute;
     font-family: serif;
     font-size: 38px;
@@ -221,14 +194,14 @@ html_content = f"""<!DOCTYPE html>
     z-index: 15;
     line-height: 1;
     text-shadow: 0 2px 5px rgba(122,0,48,0.5);
-  }}}}
-  .corner-tl {{{{ top: 50px; left: 52px; }}}}
-  .corner-tr {{{{ top: 50px; right: 52px; }}}}
-  .corner-bl {{{{ bottom: 50px; left: 52px; }}}}
-  .corner-br {{{{ bottom: 50px; right: 52px; }}}}
+  }}
+  .corner-tl {{ top: 50px; left: 52px; }}
+  .corner-tr {{ top: 50px; right: 52px; }}
+  .corner-bl {{ bottom: 50px; left: 52px; }}
+  .corner-br {{ bottom: 50px; right: 52px; }}
 
   /* ── BACKGROUND LAYERS ── */
-  .bg-image {{{{
+  .bg-image {{
     position: absolute;
     inset: 0;
     background-image: url("{bg_data_uri}");
@@ -236,40 +209,16 @@ html_content = f"""<!DOCTYPE html>
     background-position: center;
     filter: saturate(1.6) contrast(1.1) brightness(1.05);
     z-index: 1;
-  }}}}
-  .bg-vignette {{{{
+  }}
+  .bg-vignette {{
     position: absolute;
     inset: 0;
     background: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(255,250,240,0.72) 0%, rgba(255,250,240,0.65) 45%, rgba(255,250,240,0.3) 80%, transparent 100%);
     z-index: 2;
-  }}}}
-
-  /* ── LOGO: Flexbox-centered inside a wrapper div ── */
-  .logo-wrapper {{{{
-    position: absolute;
-    top: 58px;
-    left: 60px;
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 3px solid #c8960c;
-    background: transparent;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 5px rgba(200,150,12,0.15);
-    z-index: 25;
-    /* Flexbox perfectly centers the logo image inside the circle */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }}}}
-  .logo-wrapper img {{{{
-    width: 78%;
-    height: 78%;
-    object-fit: contain;
-  }}}}
+  }}
 
   /* ── CONTENT LAYOUT ── */
-  .cert-content {{{{
+  .cert-content {{
     position: relative;
     z-index: 20;
     display: flex;
@@ -278,14 +227,14 @@ html_content = f"""<!DOCTYPE html>
     height: 100%;
     padding: 85px 130px 65px 130px;
     box-sizing: border-box;
-  }}}}
+  }}
 
   /* Section 1: Header */
-  .header-block {{{{
+  .header-block {{
     text-align: center;
     margin-top: 5px;
-  }}}}
-  .main-title {{{{
+  }}
+  .main-title {{
     font-family: 'Noto Serif Bengali', serif;
     font-weight: 900;
     font-size: 62pt;
@@ -295,8 +244,8 @@ html_content = f"""<!DOCTYPE html>
     letter-spacing: normal;
     text-rendering: optimizeLegibility;
     text-shadow: 0 4px 15px rgba(255,250,240,0.95), 0 2px 5px rgba(0,0,0,0.2);
-  }}}}
-  .organizer {{{{
+  }}
+  .organizer {{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 600;
     font-size: 17pt;
@@ -304,19 +253,19 @@ html_content = f"""<!DOCTYPE html>
     margin: 12px 0 0 0;
     letter-spacing: normal;
     text-shadow: 0 1px 6px rgba(255,250,240,1);
-  }}}}
+  }}
 
   /* Section 2: Gold Divider */
-  .gold-divider {{{{
+  .gold-divider {{
     width: 60%;
     height: 2px;
     margin: 0 auto;
     background: linear-gradient(to right, transparent, #f5d060, #c8960c, #f5d060, transparent);
     box-shadow: 0 0 10px rgba(200,150,12,0.5);
-  }}}}
+  }}
 
   /* Section 3: Body Text */
-  .body-text-box {{{{
+  .body-text-box {{
     padding: 10px 30px 25px 30px;
     text-align: center;
     font-family: 'Noto Sans Bengali', sans-serif;
@@ -329,11 +278,11 @@ html_content = f"""<!DOCTYPE html>
     letter-spacing: normal;
     text-rendering: optimizeLegibility;
     text-shadow: 0 2px 10px rgba(255,250,240,0.95), 0 0 15px rgba(255,250,240,0.8);
-  }}}}
-  .body-text-line-wrapper {{{{
+  }}
+  .body-text-line-wrapper {{
     margin-top: 25px;
-  }}}}
-  .blank {{{{
+  }}
+  .blank {{
     display: inline-block;
     border-bottom: 3px solid #3a1500;
     vertical-align: text-bottom;
@@ -341,10 +290,10 @@ html_content = f"""<!DOCTYPE html>
     padding: 0 10px;
     color: #7a0030;
     font-weight: 800;
-  }}}}
+  }}
 
   /* Section 4: Date & Place */
-  .date-place {{{{
+  .date-place {{
     display: flex;
     justify-content: space-between;
     width: 75%;
@@ -354,42 +303,42 @@ html_content = f"""<!DOCTYPE html>
     font-size: 18pt;
     color: #3a1500;
     text-shadow: 0 1px 5px rgba(255,250,240,1);
-  }}}}
+  }}
 
   /* Section 5: Signatures */
-  .signature-block {{{{
+  .signature-block {{
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 25px;
     padding: 0 30px;
-  }}}}
-  .sig-col {{{{
+  }}
+  .sig-col {{
     display: flex;
     flex-direction: column;
     align-items: center;
-  }}}}
-  .sig-line-wrapper {{{{
+  }}
+  .sig-line-wrapper {{
     position: relative;
     width: 130px;
     margin-bottom: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }}}}
-  .sig-line-wrapper::before {{{{
-    content: '✦';
+  }}
+  .sig-line-wrapper::before {{
+    content: '\u2726';
     color: #c8960c;
     font-size: 14pt;
     position: absolute;
     top: -26px;
     text-shadow: 0 1px 2px rgba(120,0,40,0.4);
-  }}}}
-  .sig-line {{{{
+  }}
+  .sig-line {{
     width: 100%;
     border-top: 3px solid #7a0030;
-  }}}}
-  .sig-role {{{{
+  }}
+  .sig-role {{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 900;
     font-size: 26pt;
@@ -401,10 +350,10 @@ html_content = f"""<!DOCTYPE html>
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     margin-top: 4px;
-  }}}}
+  }}
 
   /* Download Button */
-  .downloadBtn {{{{
+  .downloadBtn {{
     background: linear-gradient(135deg, #c8960c, #f5d060, #c8960c);
     color: #3a1500;
     font-family: 'Noto Sans Bengali', sans-serif;
@@ -419,27 +368,27 @@ html_content = f"""<!DOCTYPE html>
     letter-spacing: 1px;
     transition: transform 0.2s, box-shadow 0.2s;
     z-index: 100;
-  }}}}
-  .downloadBtn:hover {{{{
+  }}
+  .downloadBtn:hover {{
     transform: scale(1.04);
     box-shadow: 0 8px 30px rgba(200,150,12,0.6);
-  }}}}
+  }}
 
   /* Print */
-  @media print {{{{
-    body {{{{ background: none; padding: 0; }}}}
-    .downloadBtn, .controls-wrapper {{{{ display: none; }}}}
-    .scale-wrapper {{{{ transform: none !important; width: 297mm; height: 210mm; }}}}
-    #certificate {{{{ width: 297mm; height: 210mm; }}}}
-  }}}}
+  @media print {{
+    body {{ background: none; padding: 0; }}
+    .downloadBtn, .controls-wrapper {{ display: none; }}
+    .scale-wrapper {{ transform: none !important; width: 297mm; height: 210mm; }}
+    #certificate {{ width: 297mm; height: 210mm; }}
+  }}
 </style>
 </head>
 <body>
 
   <!-- Toggle UI -->
   <div class="controls-wrapper">
-    <button id="btn-ankon" class="toggle-type-btn active" onclick="setCertType('অঙ্কন')">অঙ্কন প্রতিযোগিতা</button>
-    <button id="btn-fashion" class="toggle-type-btn" onclick="setCertType('ফ্যাশন')">ফ্যাশন প্রতিযোগিতা</button>
+    <button id="btn-ankon" class="toggle-type-btn active" onclick="setCertType('\u0985\u0999\u09cd\u0995\u09a8')">\u0985\u0999\u09cd\u0995\u09a8 \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be</button>
+    <button id="btn-fashion" class="toggle-type-btn" onclick="setCertType('\u09ab\u09cd\u09af\u09be\u09b6\u09a8')">\u09ab\u09cd\u09af\u09be\u09b6\u09a8 \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be</button>
   </div>
 
   <div class="scale-wrapper" id="scaleWrapper">
@@ -460,24 +409,19 @@ html_content = f"""<!DOCTYPE html>
       </div>
       <div class="border-inner-crimson"></div>
 
-      <!-- Logo (flexbox centered inside wrapper) -->
-      <div class="logo-wrapper">
-        <img src="{logo_data_uri}" alt="Logo" />
-      </div>
-
       <!-- Corner Ornaments -->
-      <div class="corner-ornament corner-tl">❧</div>
-      <div class="corner-ornament corner-tr">❧</div>
-      <div class="corner-ornament corner-bl">❧</div>
-      <div class="corner-ornament corner-br">❧</div>
+      <div class="corner-ornament corner-tl">\u2767</div>
+      <div class="corner-ornament corner-tr">\u2767</div>
+      <div class="corner-ornament corner-bl">\u2767</div>
+      <div class="corner-ornament corner-br">\u2767</div>
 
       <!-- Content -->
       <div class="cert-content">
 
         <!-- 1. Header -->
         <div class="header-block">
-          <div class="main-title">আবার বসন্ত, ২০২৬</div>
-          <div class="organizer">পরিচালনায়: ১৬ নম্বর ওয়ার্ড বসন্ত উৎসব কমিটি</div>
+          <div class="main-title">\u0986\u09ac\u09be\u09b0 \u09ac\u09b8\u09a8\u09cd\u09a4, \u09e8\u09e6\u09e8\u09ec</div>
+          <div class="organizer">\u09aa\u09b0\u09bf\u099a\u09be\u09b2\u09a8\u09be\u09af\u09bc: \u09e7\u09ec \u09a8\u09ae\u09cd\u09ac\u09b0 \u0993\u09af\u09bc\u09be\u09b0\u09cd\u09a1 \u09ac\u09b8\u09a8\u09cd\u09a4 \u0989\u09ce\u09b8\u09ac \u0995\u09ae\u09bf\u099f\u09bf</div>
         </div>
 
         <!-- 2. Divider -->
@@ -486,28 +430,28 @@ html_content = f"""<!DOCTYPE html>
         <!-- 3. Body Text -->
         <div class="body-text-box">
           <div class="body-text-line-wrapper">
-            <span class="blank" id="blankType" style="min-width: 260px;">অঙ্কন</span> প্রতিযোগিতায় <span class="blank" style="min-width: 200px;"></span> বিভাগে <span class="blank" style="min-width: 140px;"></span> স্থানাধিকারী
+            <span class="blank" id="blankType" style="min-width: 260px;">\u0985\u0999\u09cd\u0995\u09a8</span> \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be\u09af\u09bc <span class="blank" style="min-width: 200px;"></span> \u09ac\u09bf\u09ad\u09be\u0997\u09c7 <span class="blank" style="min-width: 140px;"></span> \u09b8\u09cd\u09a5\u09be\u09a8\u09be\u09a7\u09bf\u0995\u09be\u09b0\u09c0
           </div>
           <div class="body-text-line-wrapper">
-            শ্রী/শ্রীমতী <span class="blank" style="min-width: 580px;"></span> কে শংসাপত্র প্রদত্ত হল।
+            \u09b6\u09cd\u09b0\u09c0/\u09b6\u09cd\u09b0\u09c0\u09ae\u09a4\u09c0 <span class="blank" style="min-width: 580px;"></span> \u0995\u09c7 \u09b6\u0982\u09b8\u09be\u09aa\u09a4\u09cd\u09b0 \u09aa\u09cd\u09b0\u09a6\u09a4\u09cd\u09a4 \u09b9\u09b2\u0964
           </div>
         </div>
 
         <!-- 4. Date & Place -->
         <div class="date-place">
-          <div>তারিখ: <span class="blank" style="min-width: 140px;"></span></div>
-          <div>স্থান: <span style="margin-left:8px;">মোংলাপাড়া মাঠ</span></div>
+          <div>\u09a4\u09be\u09b0\u09bf\u0996: <span class="blank" style="min-width: 140px;"></span></div>
+          <div>\u09b8\u09cd\u09a5\u09be\u09a8: <span style="margin-left:8px;">\u09ae\u09cb\u0982\u09b2\u09be\u09aa\u09be\u09a1\u09bc\u09be \u09ae\u09be\u09a0</span></div>
         </div>
 
         <!-- 5. Signatures -->
         <div class="signature-block">
           <div class="sig-col">
             <div class="sig-line-wrapper"><div class="sig-line"></div></div>
-            <div class="sig-role">সভাপতি</div>
+            <div class="sig-role">\u09b8\u09ad\u09be\u09aa\u09a4\u09bf</div>
           </div>
           <div class="sig-col">
             <div class="sig-line-wrapper"><div class="sig-line"></div></div>
-            <div class="sig-role">সম্পাদক</div>
+            <div class="sig-role">\u09b8\u09ae\u09cd\u09aa\u09be\u09a6\u0995</div>
           </div>
         </div>
 
@@ -518,39 +462,39 @@ html_content = f"""<!DOCTYPE html>
   <button class="downloadBtn" id="downloadBtn">Download Certificate (PNG)</button>
 
   <script>
-    function setCertType(typeStr) {{{{
+    function setCertType(typeStr) {{
       document.getElementById('blankType').innerText = typeStr;
-      if (typeStr === 'অঙ্কন') {{{{
+      if (typeStr === '\u0985\u0999\u09cd\u0995\u09a8') {{
         document.getElementById('btn-ankon').classList.add('active');
         document.getElementById('btn-fashion').classList.remove('active');
-      }}}} else {{{{
+      }} else {{
         document.getElementById('btn-fashion').classList.add('active');
         document.getElementById('btn-ankon').classList.remove('active');
-      }}}}
-    }}}}
+      }}
+    }}
 
-    function resizeCertificate() {{{{
+    function resizeCertificate() {{
       const wrapper = document.getElementById('scaleWrapper');
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
       const scaleX = (windowWidth - 40) / 1587;
       const scaleY = (windowHeight - 160) / 1123;
       const scale = Math.min(scaleX, scaleY, 1);
-      wrapper.style.transform = `scale(${{{{scale}}}})`;
-      wrapper.style.marginBottom = `-${{{{1123 * (1 - scale)}}}}px`;
-    }}}}
+      wrapper.style.transform = `scale(${{scale}})`;
+      wrapper.style.marginBottom = `-${{1123 * (1 - scale)}}px`;
+    }}
 
     window.addEventListener('resize', resizeCertificate);
     resizeCertificate();
 
-    document.getElementById('downloadBtn').addEventListener('click', async () => {{{{
+    document.getElementById('downloadBtn').addEventListener('click', async () => {{
       const btn = document.getElementById('downloadBtn');
       const originalText = btn.innerText;
       btn.innerText = "Generating PNG... (This may take a moment)";
       btn.style.opacity = "0.7";
       btn.style.pointerEvents = "none";
 
-      try {{{{
+      try {{
         const cert = document.getElementById('certificate');
         await document.fonts.ready;
         await new Promise(resolve => setTimeout(resolve, 300));
@@ -558,22 +502,22 @@ html_content = f"""<!DOCTYPE html>
         const isMobile = window.innerWidth <= 768;
         const exportScale = isMobile ? 2.5 : 4;
 
-        const canvas = await html2canvas(cert, {{{{
+        const canvas = await html2canvas(cert, {{
           scale: exportScale,
           useCORS: true,
           backgroundColor: null,
           logging: false,
           letterRendering: 1,
-          onclone: function(clonedDoc) {{{{
+          onclone: function(clonedDoc) {{
             const scaleWrap = clonedDoc.getElementById('scaleWrapper');
-            if (scaleWrap) {{{{
+            if (scaleWrap) {{
               scaleWrap.style.transform = 'none';
               scaleWrap.style.marginBottom = '0';
-            }}}}
-          }}}}
-        }}}});
+            }}
+          }}
+        }});
 
-        canvas.toBlob((blob) => {{{{
+        canvas.toBlob((blob) => {{
           if (!blob) throw new Error("Canvas to Blob failed.");
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
@@ -581,21 +525,21 @@ html_content = f"""<!DOCTYPE html>
           link.href = blobUrl;
           document.body.appendChild(link);
           link.click();
-          setTimeout(() => {{{{ document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }}}}, 100);
+          setTimeout(() => {{ document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }}, 100);
 
           btn.innerText = originalText;
           btn.style.opacity = "1";
           btn.style.pointerEvents = "auto";
-        }}}}, 'image/png', 1.0);
+        }}, 'image/png', 1.0);
 
-      }}}} catch (err) {{{{
+      }} catch (err) {{
         console.error(err);
         alert("Error generating PNG. Check console.");
         btn.innerText = originalText;
         btn.style.opacity = "1";
         btn.style.pointerEvents = "auto";
-      }}}}
-    }}}});
+      }}
+    }});
   </script>
 </body>
 </html>
