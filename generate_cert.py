@@ -78,37 +78,7 @@ html_content = f"""<!DOCTYPE html>
     font-family: 'Noto Sans Bengali', sans-serif;
   }}
 
-  /* Toggle Controls */
-  .controls-wrapper {{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-    background: #111;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 100;
-  }}
-  .toggle-type-btn {{
-    background: transparent;
-    border: 2px solid #c8960c;
-    color: #c8960c;
-    font-family: 'Noto Sans Bengali', sans-serif;
-    font-size: 13pt;
-    font-weight: 700;
-    padding: 8px 24px;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }}
-  .toggle-type-btn.active {{
-    background: linear-gradient(135deg, #c8960c, #f5d060, #c8960c);
-    color: #3a1500;
-    box-shadow: 0 4px 12px rgba(200,150,12,0.4);
-    border-color: transparent;
-  }}
+
 
   /* Scaling wrapper */
   .scale-wrapper {{
@@ -385,11 +355,7 @@ html_content = f"""<!DOCTYPE html>
 </head>
 <body>
 
-  <!-- Toggle UI -->
-  <div class="controls-wrapper">
-    <button id="btn-ankon" class="toggle-type-btn active" onclick="setCertType('\u0985\u0999\u09cd\u0995\u09a8')">\u0985\u0999\u09cd\u0995\u09a8 \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be</button>
-    <button id="btn-fashion" class="toggle-type-btn" onclick="setCertType('\u09ab\u09cd\u09af\u09be\u09b6\u09a8')">\u09ab\u09cd\u09af\u09be\u09b6\u09a8 \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be</button>
-  </div>
+
 
   <div class="scale-wrapper" id="scaleWrapper">
     <div id="certificate">
@@ -430,7 +396,7 @@ html_content = f"""<!DOCTYPE html>
         <!-- 3. Body Text -->
         <div class="body-text-box">
           <div class="body-text-line-wrapper">
-            <span class="blank" id="blankType" style="min-width: 260px;">\u0985\u0999\u09cd\u0995\u09a8</span> \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be\u09af\u09bc <span class="blank" style="min-width: 200px;"></span> \u09ac\u09bf\u09ad\u09be\u0997\u09c7 <span class="blank" style="min-width: 140px;"></span> \u09b8\u09cd\u09a5\u09be\u09a8\u09be\u09a7\u09bf\u0995\u09be\u09b0\u09c0
+            <span class="blank" style="min-width: 260px;"></span> \u09aa\u09cd\u09b0\u09a4\u09bf\u09af\u09cb\u0997\u09bf\u09a4\u09be\u09af\u09bc <span class="blank" style="min-width: 200px;"></span> \u09ac\u09bf\u09ad\u09be\u0997\u09c7 <span class="blank" style="min-width: 140px;"></span> \u09b8\u09cd\u09a5\u09be\u09a8\u09be\u09a7\u09bf\u0995\u09be\u09b0\u09c0
           </div>
           <div class="body-text-line-wrapper">
             \u09b6\u09cd\u09b0\u09c0/\u09b6\u09cd\u09b0\u09c0\u09ae\u09a4\u09c0 <span class="blank" style="min-width: 580px;"></span> \u0995\u09c7 \u09b6\u0982\u09b8\u09be\u09aa\u09a4\u09cd\u09b0 \u09aa\u09cd\u09b0\u09a6\u09a4\u09cd\u09a4 \u09b9\u09b2\u0964
@@ -462,16 +428,7 @@ html_content = f"""<!DOCTYPE html>
   <button class="downloadBtn" id="downloadBtn">Download Certificate (PNG)</button>
 
   <script>
-    function setCertType(typeStr) {{
-      document.getElementById('blankType').innerText = typeStr;
-      if (typeStr === '\u0985\u0999\u09cd\u0995\u09a8') {{
-        document.getElementById('btn-ankon').classList.add('active');
-        document.getElementById('btn-fashion').classList.remove('active');
-      }} else {{
-        document.getElementById('btn-fashion').classList.add('active');
-        document.getElementById('btn-ankon').classList.remove('active');
-      }}
-    }}
+
 
     function resizeCertificate() {{
       const wrapper = document.getElementById('scaleWrapper');
@@ -521,7 +478,7 @@ html_content = f"""<!DOCTYPE html>
           if (!blob) throw new Error("Canvas to Blob failed.");
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
-          link.download = document.getElementById('btn-ankon').classList.contains('active') ? 'ankon_certificate.png' : 'fashion_certificate.png';
+          link.download = 'certificate.png';
           link.href = blobUrl;
           document.body.appendChild(link);
           link.click();
