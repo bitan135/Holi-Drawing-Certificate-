@@ -31,6 +31,24 @@ if os.path.exists(logo_path):
     logo_b64 = base64.b64encode(logo_buffer.getvalue()).decode("utf-8")
     logo_data_uri = f"data:image/png;base64,{logo_b64}"
 
+# 3. Traditional Alpona SVG Border (Base64 encoded for html2canvas compatibility)
+svg_h = """<svg width="60" height="24" viewBox="0 0 60 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30,2 C42,2 48,10 60,12 C48,14 42,22 30,22 C18,22 12,14 0,12 C12,10 18,2 30,2 Z" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+  <path d="M30,6 C38,6 42,10 50,12 C42,14 38,18 30,18 C22,18 18,14 10,12 C18,10 22,6 30,6 Z" fill="#e8b030" opacity="0.85"/>
+  <circle cx="30" cy="12" r="3" fill="#7a0030"/>
+  <circle cx="0" cy="12" r="1.5" fill="#c8960c"/>
+  <circle cx="60" cy="12" r="1.5" fill="#c8960c"/>
+</svg>"""
+alpona_h_uri = f"data:image/svg+xml;base64,{base64.b64encode(svg_h.encode('utf-8')).decode('utf-8')}"
+
+svg_v = """<svg width="24" height="60" viewBox="0 0 24 60" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2,30 C2,42 10,48 12,60 C14,48 22,42 22,30 C22,18 14,12 12,0 C10,12 2,18 2,30 Z" fill="none" stroke="#c8960c" stroke-width="1.5"/>
+  <path d="M6,30 C6,38 10,42 12,50 C14,42 18,38 18,30 C18,22 14,18 12,10 C10,18 6,22 6,30 Z" fill="#e8b030" opacity="0.85"/>
+  <circle cx="12" cy="30" r="3" fill="#7a0030"/>
+  <circle cx="12" cy="0" r="1.5" fill="#c8960c"/>
+  <circle cx="12" cy="60" r="1.5" fill="#c8960c"/>
+</svg>"""
+alpona_v_uri = f"data:image/svg+xml;base64,{base64.b64encode(svg_v.encode('utf-8')).decode('utf-8')}"
 
 html_content = f"""<!DOCTYPE html>
 <html lang="bn">
@@ -128,45 +146,49 @@ html_content = f"""<!DOCTYPE html>
   /* CHANGE 8: Logo Placement Refined */
   .cert-logo {{
     position: absolute;
-    top: 68px; /* ~18mm scaled */
-    left: 75px; /* ~20mm scaled */
-    width: 85px; /* Slightly larger */
-    height: 85px;
-    object-fit: contain;
-    background: rgba(255, 250, 240, 0.85); /* Premium frosted cream */
-    border: 2px solid #c8960c; /* Matching gold ring */
+    top: 66px; 
+    left: 72px; 
+    width: 90px; 
+    height: 90px;
+    object-fit: cover; /* Fit completely inside the circle without gaps */
+    object-position: center;
+    background: transparent; 
+    border: 3px solid #c8960c; /* Premium gold ring */
     border-radius: 50%;
-    padding: 8px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 0 8px rgba(255,255,255,0.8);
-    z-index: 25; /* above everything */
+    padding: 0; /* Removing padding makes it feel like a professional seal */
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4), 0 0 0 4px rgba(255,250,240,0.4);
+    z-index: 25;
   }}
 
-  /* CHANGE 2: Refined Traditional Alpona-style Decorative Border */
-  /* Replaced raw unicode characters with an elegant, hand-crafted CSS geometric pattern that mimics traditional Indian/Bengali motifs */
+  /* CHANGE 2: True Traditional Alpona SVG Decorative Motif */
   .alpona-strip {{
     position: absolute;
-    inset: 22px; /* Just barely inside the 14px gold box-shadow border */
-    border: 6px solid transparent;
-    /* An elegant repeating diamond/dot motif using CSS gradients */
-    border-image: repeating-radial-gradient(
-      circle at 0 0,
-      transparent 0,
-      transparent 5px,
-      #c8960c 6px,
-      #c8960c 7px,
-      transparent 8px
-    ) 12;
-    padding: 4px;
+    inset: 26px; /* Inset from the gold box-shadow frame */
+    border: 1px solid rgba(122,0,48,0.5); /* Inner thin crimson trace */
     z-index: 10;
     pointer-events: none;
+    box-shadow: 0 0 0 4px rgba(200,150,12,0.15); /* Soft gold padding glow */
   }}
-  .alpona-inner {{
-     /* A secondary inner border to frame the Alpona pattern */
-     position: absolute;
-     inset: 4px;
-     border: 1px dotted #7a0030;
-     opacity: 0.6;
+  .alpona-edge {{
+    position: absolute;
+    background-repeat: repeat;
   }}
+  .alpona-top, .alpona-bottom {{
+    left: 0; right: 0;
+    height: 24px;
+    background-image: url("{alpona_h_uri}");
+    background-repeat: repeat-x;
+  }}
+  .alpona-left, .alpona-right {{
+    top: 0; bottom: 0;
+    width: 24px;
+    background-image: url("{alpona_v_uri}");
+    background-repeat: repeat-y;
+  }}
+  .alpona-top {{ top: -12px; }}
+  .alpona-bottom {{ bottom: -12px; }}
+  .alpona-left {{ left: -12px; }}
+  .alpona-right {{ right: -12px; }}
   
   /* Corner Ornaments */
   .corner-ornament {{
@@ -233,27 +255,30 @@ html_content = f"""<!DOCTYPE html>
 
   /* Section 3: Body Text box */
   .body-text-box {{
-    padding: 18px 30px;
+    padding: 10px 30px 25px 30px;
     text-align: center;
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 600; 
-    font-size: 20pt; 
+    font-size: 22pt; /* Generous font scale */
     color: #120808;
-    line-height: 2.4;
+    line-height: 2.2;
     margin: 0 auto;
     width: 95%;
     letter-spacing: normal;
     text-rendering: optimizeLegibility;
-    text-shadow: 0 2px 10px rgba(255,250,240,0.95);
+    text-shadow: 0 2px 10px rgba(255,250,240,0.95), 0 0 15px rgba(255,250,240,0.8); /* Better stand-out over artwork */
+  }}
+  .body-text-line-wrapper {{
+    margin-top: 25px; /* Adds critical vertical spacing so huge names comfortably fit */
   }}
   .blank {{
     display: inline-block;
-    border-bottom: 2px solid #3a1500;
-    transform: translateY(2px);
+    border-bottom: 3px solid #3a1500;
+    vertical-align: text-bottom; /* Replaced bad transform hack. Sits text beautifully flush with the baseline. */
     text-align: center;
     padding: 0 10px;
     color: #7a0030;
-    font-weight: 700;
+    font-weight: 800;
   }}
 
   /* Section 4: Date & Place */
@@ -264,7 +289,7 @@ html_content = f"""<!DOCTYPE html>
     margin: 0 auto; 
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 700;
-    font-size: 16pt;
+    font-size: 18pt;
     color: #3a1500;
     text-shadow: 0 1px 5px rgba(255,250,240,1);
   }}
@@ -274,42 +299,46 @@ html_content = f"""<!DOCTYPE html>
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
+    padding: 0 30px;
   }}
   .sig-col {{
     display: flex;
     flex-direction: column;
     align-items: center;
   }}
-  /* CHANGE 3: Add ornament above signature lines */
+  /* Add ornament above signature lines */
   .sig-line-wrapper {{
     position: relative;
-    width: 80px; 
-    margin-bottom: 12px;
+    width: 130px; /* Stronger signature anchor width */
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }}
   .sig-line-wrapper::before {{
-    content: '✦'; /* small gold ornament */
+    content: '✦'; 
     color: #c8960c;
-    font-size: 12pt;
+    font-size: 14pt;
     position: absolute;
-    top: -24px;
-    text-shadow: 0 1px 2px rgba(120,0,40,0.2);
+    top: -26px;
+    text-shadow: 0 1px 2px rgba(120,0,40,0.4);
   }}
   .sig-line {{
     width: 100%;
-    border-top: 3px solid #7a0030; /* Thicker bold line */
+    border-top: 3px solid #7a0030; 
   }}
   .sig-role {{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 900;
-    font-size: 20pt; /* Much larger and more prominent */
+    font-size: 26pt; /* Gigantic, impossible to miss */
     color: #7a0030;
     letter-spacing: normal;
     text-shadow: 0 2px 6px rgba(120,0,40,0.4);
-    margin-top: 6px;
+    background: rgba(255, 250, 240, 0.85); /* High-contrast frosting pill */
+    padding: 4px 28px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   }}
 
   /* Download Button */
@@ -360,9 +389,12 @@ html_content = f"""<!DOCTYPE html>
       <!-- Logo -->
       <img src="{logo_data_uri}" class="cert-logo" alt="Logo" />
 
-      <!-- Alpona Decorative Border -->
+      <!-- True SVG Alpona Decorative Border Elements -->
       <div class="alpona-strip">
-        <div class="alpona-inner"></div>
+        <div class="alpona-edge alpona-top"></div>
+        <div class="alpona-edge alpona-bottom"></div>
+        <div class="alpona-edge alpona-left"></div>
+        <div class="alpona-edge alpona-right"></div>
       </div>
       
       <!-- Corner Ornaments ❧ -->
@@ -383,10 +415,14 @@ html_content = f"""<!DOCTYPE html>
         <!-- 2. Divider -->
         <div class="gold-divider"></div>
 
-        <!-- 3. Body Text (CHANGE 4: Adjusted min-widths, CHANGE 6: Wording) -->
+        <!-- 3. Body Text (Fluid Alignment & Massive Widths) -->
         <div class="body-text-box">
-          <span class="blank" id="blankType" style="min-width: 220px;">অঙ্কন</span> প্রতিযোগিতায় <span class="blank" style="min-width: 160px;"></span> বিভাগে <span class="blank" style="min-width: 120px;"></span> স্থানাধিকারী<br>
-          শ্রী/শ্রীমতী <span class="blank" style="min-width: 420px;"></span> কে শংসাপত্র প্রদত্ত হল।
+          <div class="body-text-line-wrapper">
+             <span class="blank" id="blankType" style="min-width: 260px;">অঙ্কন</span> প্রতিযোগিতায় <span class="blank" style="min-width: 200px;"></span> বিভাগে <span class="blank" style="min-width: 140px;"></span> স্থানাধিকারী
+          </div>
+          <div class="body-text-line-wrapper">
+             শ্রী/শ্রীমতী <span class="blank" style="min-width: 580px;"></span> কে শংসাপত্র প্রদত্ত হল।
+          </div>
         </div>
 
         <!-- 4. Date & Place (CHANGE 5: No underline for Location limit) -->
