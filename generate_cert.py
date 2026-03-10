@@ -125,63 +125,50 @@ html_content = f"""<!DOCTYPE html>
     z-index: 2;
   }}
 
-  /* CHANGE 8: Logo Placement */
+  /* CHANGE 8: Logo Placement Refined */
   .cert-logo {{
     position: absolute;
     top: 68px; /* ~18mm scaled */
     left: 75px; /* ~20mm scaled */
-    width: 72px;
-    height: 72px;
+    width: 85px; /* Slightly larger */
+    height: 85px;
     object-fit: contain;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 250, 240, 0.85); /* Premium frosted cream */
+    border: 2px solid #c8960c; /* Matching gold ring */
     border-radius: 50%;
-    padding: 6px;
+    padding: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 0 8px rgba(255,255,255,0.8);
     z-index: 25; /* above everything */
   }}
 
-  /* CHANGE 2: Alpona-style Decorative Border */
+  /* CHANGE 2: Refined Traditional Alpona-style Decorative Border */
+  /* Replaced raw unicode characters with an elegant, hand-crafted CSS geometric pattern that mimics traditional Indian/Bengali motifs */
   .alpona-strip {{
     position: absolute;
     inset: 22px; /* Just barely inside the 14px gold box-shadow border */
-    border: none;
+    border: 6px solid transparent;
+    /* An elegant repeating diamond/dot motif using CSS gradients */
+    border-image: repeating-radial-gradient(
+      circle at 0 0,
+      transparent 0,
+      transparent 5px,
+      #c8960c 6px,
+      #c8960c 7px,
+      transparent 8px
+    ) 12;
+    padding: 4px;
     z-index: 10;
     pointer-events: none;
-    overflow: hidden;
   }}
-  /* Create traditional unicode repeat strips for top/bottom */
-  .alpona-h {{
-    position: absolute;
-    left: 0; right: 0;
-    height: 18px;
-    text-align: justify;
-    text-align-last: justify;
-    line-height: 18px;
-    font-size: 14px;
-    letter-spacing: 6px;
-    color: #c8960c;
-    /* Subtle 7a0030 shadow for depth matching crimson requirement */
-    text-shadow: 0 1px 1px #7a0030; 
+  .alpona-inner {{
+     /* A secondary inner border to frame the Alpona pattern */
+     position: absolute;
+     inset: 4px;
+     border: 1px dotted #7a0030;
+     opacity: 0.6;
   }}
-  .alpona-top {{ top: 0; }}
-  .alpona-bottom {{ bottom: 0; }}
-  /* Create traditional unicode repeat strips for left/right */
-  .alpona-v {{
-    position: absolute;
-    top: 0; bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 18px;
-    font-size: 14px;
-    line-height: 14px;
-    text-align: center;
-    color: #c8960c;
-    text-shadow: 0 1px 1px #7a0030; 
-  }}
-  .alpona-left {{ left: 0; }}
-  .alpona-right {{ right: 0; }}
   
-  /* Corner Ornaments (kept slightly inset from the alpona strip) */
+  /* Corner Ornaments */
   .corner-ornament {{
     position: absolute;
     font-family: serif;
@@ -313,15 +300,16 @@ html_content = f"""<!DOCTYPE html>
   }}
   .sig-line {{
     width: 100%;
-    border-top: 2.5px solid #7a0030;
+    border-top: 3px solid #7a0030; /* Thicker bold line */
   }}
   .sig-role {{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 900;
-    font-size: 14pt;
+    font-size: 20pt; /* Much larger and more prominent */
     color: #7a0030;
     letter-spacing: normal;
-    text-shadow: 0 1px 4px rgba(120,0,40,0.3);
+    text-shadow: 0 2px 6px rgba(120,0,40,0.4);
+    margin-top: 6px;
   }}
 
   /* Download Button */
@@ -374,16 +362,7 @@ html_content = f"""<!DOCTYPE html>
 
       <!-- Alpona Decorative Border -->
       <div class="alpona-strip">
-        <!-- Generates 100 characters to forcefully fill the justify flex -->
-        <div class="alpona-h alpona-top">{'❀ ❧ ' * 45}</div>
-        <div class="alpona-h alpona-bottom">{'❀ ❧ ' * 45}</div>
-        <!-- For vertical lines, html elements flow downwards perfectly -->
-        <div class="alpona-v alpona-left">
-          {"".join(['<div>❀</div><div>❧</div>' for _ in range(25)])}
-        </div>
-        <div class="alpona-v alpona-right">
-          {"".join(['<div>❀</div><div>❧</div>' for _ in range(25)])}
-        </div>
+        <div class="alpona-inner"></div>
       </div>
       
       <!-- Corner Ornaments ❧ -->
