@@ -305,7 +305,7 @@ html_content = f"""<!DOCTYPE html>
         <!-- 5. Date & Place -->
         <div class="date-place">
           <div>তারিখ: <span class="blank" style="min-width: 140px;"></span></div>
-          <div>স্থান: <span class="blank" style="min-width: 140px;"></span></div>
+          <div>স্থান: <span class="blank" style="min-width: 140px; text-align: center; padding: 0 10px;">মোংলাপাড়া মাঠ</span></div>
         </div>
 
         <!-- 6. Signatures -->
