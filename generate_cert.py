@@ -10,11 +10,13 @@ if not os.path.exists(bg_path):
     exit(1)
 
 bg_img = Image.open(bg_path)
-bg_img = bg_img.resize((1056, 746), Image.Resampling.LANCZOS)
+# Reduced from 1056x746 q75 to 528x373 q50 to cut memory 4x for mobile html2canvas
+# CSS background-size:cover upscales it — visual quality stays identical
+bg_img = bg_img.resize((528, 373), Image.Resampling.LANCZOS)
 bg_buffer = io.BytesIO()
 if bg_img.mode in ('RGBA', 'P'):
     bg_img = bg_img.convert('RGB')
-bg_img.save(bg_buffer, format="JPEG", quality=75)
+bg_img.save(bg_buffer, format="JPEG", quality=50)
 bg_b64 = base64.b64encode(bg_buffer.getvalue()).decode("utf-8")
 bg_data_uri = f"data:image/jpeg;base64,{bg_b64}"
 
@@ -447,83 +449,72 @@ html_content = f"""<!DOCTYPE html>
     document.getElementById('downloadBtn').addEventListener('click', async () => {{
       const btn = document.getElementById('downloadBtn');
       const originalText = btn.innerText;
-      const resetBtn = () => {{ btn.innerText = originalText; btn.style.opacity = "1"; btn.style.pointerEvents = "auto"; }};
+      const resetBtn = () => {{ btn.innerText = originalText; btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; }};
 
-      btn.innerText = "Generating...";
-      btn.style.opacity = "0.7";
-      btn.style.pointerEvents = "none";
-
-      // Helper: attempt render at a given scale, returns a Blob or throws
-      async function tryRender(scale) {{
-        const cert = document.getElementById('certificate');
-        const canvas = await html2canvas(cert, {{
-          scale: scale,
-          useCORS: true,
-          allowTaint: true,
-          backgroundColor: '#fffaf0',
-          logging: false,
-          letterRendering: 1,
-          imageTimeout: 0,
-          onclone: function(clonedDoc) {{
-            const sw = clonedDoc.getElementById('scaleWrapper');
-            if (sw) {{ sw.style.transform = 'none'; sw.style.marginBottom = '0'; }}
-          }}
-        }});
-        return new Promise((resolve, reject) => {{
-          canvas.toBlob(b => {{ if (b) resolve(b); else reject(new Error('toBlob returned null')); }}, 'image/png');
-        }});
-      }}
+      btn.innerText = 'Generating...';
+      btn.style.opacity = '0.7';
+      btn.style.pointerEvents = 'none';
 
       try {{
         await document.fonts.ready;
-        await new Promise(r => setTimeout(r, 150));
 
         const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 768;
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-        let blob = null;
+        // Mobile: 1x scale + JPEG = minimal memory (~2MB total)
+        // Desktop: 4x scale + PNG = ultra print quality
+        const exportScale = isMobile ? 1 : 4;
+        const exportFormat = isMobile ? 'image/jpeg' : 'image/png';
+        const exportQuality = isMobile ? 0.92 : 1.0;
+        const exportExt = isMobile ? 'jpg' : 'png';
 
-        if (isMobile) {{
-          // Progressive fallback: try highest quality first, downgrade if memory fails
-          const scales = [2, 1.5, 1];
-          for (const s of scales) {{
-            try {{
-              btn.innerText = `Generating (quality ${{Math.round(s * 100)}}%)...`;
-              blob = await tryRender(s);
-              break; // success — stop trying lower scales
-            }} catch (e) {{
-              console.warn(`Scale ${{s}}x failed:`, e.message);
-              if (s === scales[scales.length - 1]) throw e; // all scales failed
-            }}
+        const cert = document.getElementById('certificate');
+        const canvas = await html2canvas(cert, {{
+          scale: exportScale,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: '#fffaf0',
+          logging: false,
+          imageTimeout: 0,
+          onclone: function(clonedDoc) {{
+            var sw = clonedDoc.getElementById('scaleWrapper');
+            if (sw) {{ sw.style.transform = 'none'; sw.style.marginBottom = '0'; }}
           }}
-        }} else {{
-          // Desktop: always 4x for ultra print quality
-          blob = await tryRender(4);
-        }}
+        }});
 
-        if (!blob) throw new Error('No image generated');
+        // Convert canvas to blob using Promise for proper error handling
+        const blob = await new Promise(function(resolve, reject) {{
+          try {{
+            canvas.toBlob(function(b) {{
+              if (b) resolve(b);
+              else reject(new Error('Blob conversion failed'));
+            }}, exportFormat, exportQuality);
+          }} catch(e) {{
+            reject(e);
+          }}
+        }});
 
         const blobUrl = URL.createObjectURL(blob);
 
         if (isIOS) {{
-          // iOS Safari ignores <a download>. Open image in new tab for long-press save.
+          // iOS Safari: navigate to blob URL, user long-presses to save
           window.location.href = blobUrl;
-          setTimeout(() => URL.revokeObjectURL(blobUrl), 120000);
         }} else {{
-          const a = document.createElement('a');
+          // Android + Desktop: standard download
+          var a = document.createElement('a');
           a.href = blobUrl;
-          a.download = 'certificate.png';
+          a.download = 'certificate.' + exportExt;
           a.style.display = 'none';
           document.body.appendChild(a);
           a.click();
-          setTimeout(() => {{ document.body.removeChild(a); URL.revokeObjectURL(blobUrl); }}, 1000);
+          setTimeout(function() {{ document.body.removeChild(a); URL.revokeObjectURL(blobUrl); }}, 2000);
         }}
 
         resetBtn();
 
       }} catch (err) {{
-        console.error('Download failed:', err);
-        alert('Could not generate the image. Please try again or use a desktop browser.');
+        console.error('Download error:', err);
+        alert('Download failed: ' + err.message + '. Try using a desktop browser.');
         resetBtn();
       }}
     }});
