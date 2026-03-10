@@ -23,30 +23,55 @@ logo_path = "/Users/bitanbiswas/.gemini/antigravity/brain/7801b942-32ca-46e3-aee
 logo_data_uri = ""
 if os.path.exists(logo_path):
     logo_img = Image.open(logo_path)
-    # Resize logo appropriately (72x72 is approx 200x200 at full export res)
     logo_img = logo_img.resize((200, 200), Image.Resampling.LANCZOS)
     logo_buffer = io.BytesIO()
-    # Save as PNG to maintain transparency
     logo_img.save(logo_buffer, format="PNG")
     logo_b64 = base64.b64encode(logo_buffer.getvalue()).decode("utf-8")
     logo_data_uri = f"data:image/png;base64,{logo_b64}"
 
-# 3. Traditional Alpona SVG Border (Base64 encoded for html2canvas compatibility)
-svg_h = """<svg width="60" height="24" viewBox="0 0 60 24" xmlns="http://www.w3.org/2000/svg">
-  <path d="M30,2 C42,2 48,10 60,12 C48,14 42,22 30,22 C18,22 12,14 0,12 C12,10 18,2 30,2 Z" fill="none" stroke="#c8960c" stroke-width="1.5"/>
-  <path d="M30,6 C38,6 42,10 50,12 C42,14 38,18 30,18 C22,18 18,14 10,12 C18,10 22,6 30,6 Z" fill="#e8b030" opacity="0.85"/>
-  <circle cx="30" cy="12" r="3" fill="#7a0030"/>
-  <circle cx="0" cy="12" r="1.5" fill="#c8960c"/>
-  <circle cx="60" cy="12" r="1.5" fill="#c8960c"/>
+# 3. Intricate Traditional Alpona SVG Borders
+# Horizontal motif: lotus petals with paisley curves, multiple layers
+svg_h = """<svg width="80" height="28" viewBox="0 0 80 28" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer paisley leaf -->
+  <path d="M0,14 C10,2 20,2 30,14 C20,26 10,26 0,14 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
+  <path d="M5,14 C12,6 18,6 25,14 C18,22 12,22 5,14 Z" fill="#e8b030" opacity="0.3"/>
+  <!-- Center lotus bud -->
+  <ellipse cx="15" cy="14" rx="4" ry="6" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
+  <circle cx="15" cy="14" r="2" fill="#7a0030" opacity="0.5"/>
+  <!-- Second paisley, mirrored -->
+  <path d="M40,14 C50,2 60,2 70,14 C60,26 50,26 40,14 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
+  <path d="M45,14 C52,6 58,6 65,14 C58,22 52,22 45,14 Z" fill="#e8b030" opacity="0.3"/>
+  <ellipse cx="55" cy="14" rx="4" ry="6" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
+  <circle cx="55" cy="14" r="2" fill="#7a0030" opacity="0.5"/>
+  <!-- Connecting dots -->
+  <circle cx="35" cy="14" r="2.5" fill="#c8960c" opacity="0.8"/>
+  <circle cx="35" cy="6" r="1" fill="#7a0030" opacity="0.5"/>
+  <circle cx="35" cy="22" r="1" fill="#7a0030" opacity="0.5"/>
+  <!-- Fine gold lines top and bottom -->
+  <line x1="0" y1="1" x2="80" y2="1" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
+  <line x1="0" y1="27" x2="80" y2="27" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
 </svg>"""
 alpona_h_uri = f"data:image/svg+xml;base64,{base64.b64encode(svg_h.encode('utf-8')).decode('utf-8')}"
 
-svg_v = """<svg width="24" height="60" viewBox="0 0 24 60" xmlns="http://www.w3.org/2000/svg">
-  <path d="M2,30 C2,42 10,48 12,60 C14,48 22,42 22,30 C22,18 14,12 12,0 C10,12 2,18 2,30 Z" fill="none" stroke="#c8960c" stroke-width="1.5"/>
-  <path d="M6,30 C6,38 10,42 12,50 C14,42 18,38 18,30 C18,22 14,18 12,10 C10,18 6,22 6,30 Z" fill="#e8b030" opacity="0.85"/>
-  <circle cx="12" cy="30" r="3" fill="#7a0030"/>
-  <circle cx="12" cy="0" r="1.5" fill="#c8960c"/>
-  <circle cx="12" cy="60" r="1.5" fill="#c8960c"/>
+# Vertical motif: rotated version of horizontal
+svg_v = """<svg width="28" height="80" viewBox="0 0 28 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer paisley leaf vertical -->
+  <path d="M14,0 C2,10 2,20 14,30 C26,20 26,10 14,0 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
+  <path d="M14,5 C6,12 6,18 14,25 C22,18 22,12 14,5 Z" fill="#e8b030" opacity="0.3"/>
+  <ellipse cx="14" cy="15" rx="6" ry="4" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
+  <circle cx="14" cy="15" r="2" fill="#7a0030" opacity="0.5"/>
+  <!-- Second paisley vertical -->
+  <path d="M14,40 C2,50 2,60 14,70 C26,60 26,50 14,40 Z" fill="none" stroke="#b8860b" stroke-width="1.2" opacity="0.9"/>
+  <path d="M14,45 C6,52 6,58 14,65 C22,58 22,52 14,45 Z" fill="#e8b030" opacity="0.3"/>
+  <ellipse cx="14" cy="55" rx="6" ry="4" fill="none" stroke="#7a0030" stroke-width="0.8" opacity="0.7"/>
+  <circle cx="14" cy="55" r="2" fill="#7a0030" opacity="0.5"/>
+  <!-- Connecting dots -->
+  <circle cx="14" cy="35" r="2.5" fill="#c8960c" opacity="0.8"/>
+  <circle cx="6" cy="35" r="1" fill="#7a0030" opacity="0.5"/>
+  <circle cx="22" cy="35" r="1" fill="#7a0030" opacity="0.5"/>
+  <!-- Fine gold lines left and right -->
+  <line x1="1" y1="0" x2="1" y2="80" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
+  <line x1="27" y1="0" x2="27" y2="80" stroke="#c8960c" stroke-width="0.5" opacity="0.6"/>
 </svg>"""
 alpona_v_uri = f"data:image/svg+xml;base64,{base64.b64encode(svg_v.encode('utf-8')).decode('utf-8')}"
 
@@ -55,40 +80,40 @@ html_content = f"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>আবার বসন্ত ২০২৬ - প্রশস্তিকা</title>
+<title>আবার বসন্ত ২০২৬ - শংসাপত্র</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;900&family=Noto+Sans+Bengali:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
-  @page {{
+  @page {{{{
     size: 297mm 210mm landscape;
     margin: 0;
-  }}
-  body {{
+  }}}}
+  body {{{{
     margin: 0;
     padding: 20px 0 40px 0;
-    background-color: #2c2c2c;
+    background-color: #1a1a1a;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: 'Noto Sans Bengali', sans-serif;
-  }}
+  }}}}
   
-  /* Top Controls Area for the Toggle */
-  .controls-wrapper {{
+  /* Toggle Controls */
+  .controls-wrapper {{{{
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 15px;
     margin-bottom: 25px;
-    background: #1a1a1a;
+    background: #111;
     padding: 12px 24px;
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     z-index: 100;
-  }}
-  .toggle-type-btn {{
+  }}}}
+  .toggle-type-btn {{{{
     background: transparent;
     border: 2px solid #c8960c;
     color: #c8960c;
@@ -99,250 +124,287 @@ html_content = f"""<!DOCTYPE html>
     border-radius: 50px;
     cursor: pointer;
     transition: all 0.2s ease;
-  }}
-  .toggle-type-btn.active {{
+  }}}}
+  .toggle-type-btn.active {{{{
     background: linear-gradient(135deg, #c8960c, #f5d060, #c8960c);
     color: #3a1500;
     box-shadow: 0 4px 12px rgba(200,150,12,0.4);
     border-color: transparent;
-  }}
+  }}}}
 
-  /* Scaling wrapper for mobile/desktop display */
-  .scale-wrapper {{
+  /* Scaling wrapper */
+  .scale-wrapper {{{{
     width: 1587px;
     height: 1123px;
     transform-origin: top center;
-  }}
-  #certificate {{
+  }}}}
+
+  /* ═══════════════ CERTIFICATE MAIN ═══════════════ */
+  #certificate {{{{
     width: 1587px;
     height: 1123px;
     position: relative;
     background-color: #fffaf0;
     overflow: hidden;
-    /* Outermost premium border */
-    box-shadow: inset 0 0 0 8px #d4a017, inset 0 0 0 12px #fffaf0, inset 0 0 0 14px #c8960c, inset 0 0 25px 14px rgba(0,0,0,0.15), 0 15px 50px rgba(0,0,0,0.5);
     box-sizing: border-box;
-  }}
-  
-  /* Background Layers */
-  .bg-image {{
+  }}}}
+
+  /* ── MULTI-LAYER BORDER SYSTEM ── */
+  /* Layer 1: Outermost thick gold border */
+  .border-outer {{{{
+    position: absolute;
+    inset: 0;
+    border: 10px solid #b8860b;
+    z-index: 5;
+    pointer-events: none;
+  }}}}
+  /* Layer 2: Cream gap */
+  .border-cream {{{{
+    position: absolute;
+    inset: 10px;
+    border: 4px solid #fffdf5;
+    z-index: 6;
+    pointer-events: none;
+  }}}}
+  /* Layer 3: Thin inner gold line */
+  .border-inner-gold {{{{
+    position: absolute;
+    inset: 14px;
+    border: 2px solid #c8960c;
+    z-index: 7;
+    pointer-events: none;
+  }}}}
+  /* Layer 4: Alpona ornamental strip (SVG repeating background) */
+  .alpona-strip {{{{
+    position: absolute;
+    inset: 20px;
+    z-index: 8;
+    pointer-events: none;
+  }}}}
+  .alpona-edge {{{{
+    position: absolute;
+    background-repeat: repeat;
+  }}}}
+  .alpona-top, .alpona-bottom {{{{
+    left: 0; right: 0;
+    height: 28px;
+    background-image: url("{alpona_h_uri}");
+    background-size: 80px 28px;
+    background-repeat: repeat-x;
+  }}}}
+  .alpona-left, .alpona-right {{{{
+    top: 0; bottom: 0;
+    width: 28px;
+    background-image: url("{alpona_v_uri}");
+    background-size: 28px 80px;
+    background-repeat: repeat-y;
+  }}}}
+  .alpona-top  {{{{ top: 0; }}}}
+  .alpona-bottom {{{{ bottom: 0; }}}}
+  .alpona-left {{{{ left: 0; }}}}
+  .alpona-right {{{{ right: 0; }}}}
+  /* Layer 5: Innermost fine crimson line */
+  .border-inner-crimson {{{{
+    position: absolute;
+    inset: 48px;
+    border: 1px solid rgba(122,0,48,0.35);
+    z-index: 9;
+    pointer-events: none;
+  }}}}
+
+  /* Corner Ornaments */
+  .corner-ornament {{{{
+    position: absolute;
+    font-family: serif;
+    font-size: 38px;
+    color: #c8960c;
+    z-index: 15;
+    line-height: 1;
+    text-shadow: 0 2px 5px rgba(122,0,48,0.5);
+  }}}}
+  .corner-tl {{{{ top: 50px; left: 52px; }}}}
+  .corner-tr {{{{ top: 50px; right: 52px; }}}}
+  .corner-bl {{{{ bottom: 50px; left: 52px; }}}}
+  .corner-br {{{{ bottom: 50px; right: 52px; }}}}
+
+  /* ── BACKGROUND LAYERS ── */
+  .bg-image {{{{
     position: absolute;
     inset: 0;
     background-image: url("{bg_data_uri}");
     background-size: cover;
     background-position: center;
-    /* CHANGE 7: Vibrancy Filters */
     filter: saturate(1.6) contrast(1.1) brightness(1.05);
     z-index: 1;
-  }}
-  .bg-vignette {{
+  }}}}
+  .bg-vignette {{{{
     position: absolute;
     inset: 0;
-    /* CHANGE 7: more transparent center */
     background: radial-gradient(ellipse 75% 65% at 50% 50%, rgba(255,250,240,0.72) 0%, rgba(255,250,240,0.65) 45%, rgba(255,250,240,0.3) 80%, transparent 100%);
     z-index: 2;
-  }}
+  }}}}
 
-  /* CHANGE 8: Logo Placement Refined */
-  .cert-logo {{
+  /* ── LOGO: Flexbox-centered inside a wrapper div ── */
+  .logo-wrapper {{{{
     position: absolute;
-    top: 66px; 
-    left: 72px; 
-    width: 90px; 
-    height: 90px;
-    object-fit: contain; /* Ensure the entire logo is safely visible */
-    object-position: center;
-    background: transparent; /* Removed background fill as requested */
-    border: 3px solid #c8960c; /* Premium gold ring */
+    top: 58px;
+    left: 60px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
-    padding: 8px; /* Slightly more padding for elegant breathing room */
-    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+    border: 3px solid #c8960c;
+    background: transparent;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 0 5px rgba(200,150,12,0.15);
     z-index: 25;
-  }}
+    /* Flexbox perfectly centers the logo image inside the circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }}}}
+  .logo-wrapper img {{{{
+    width: 78%;
+    height: 78%;
+    object-fit: contain;
+  }}}}
 
-  /* CHANGE 2: True Traditional Alpona SVG Decorative Motif */
-  .alpona-strip {{
-    position: absolute;
-    inset: 26px; /* Inset from the gold box-shadow frame */
-    border: 1px solid rgba(122,0,48,0.5); /* Inner thin crimson trace */
-    z-index: 10;
-    pointer-events: none;
-    box-shadow: 0 0 0 4px rgba(200,150,12,0.15); /* Soft gold padding glow */
-  }}
-  .alpona-edge {{
-    position: absolute;
-    background-repeat: repeat;
-  }}
-  .alpona-top, .alpona-bottom {{
-    left: 0; right: 0;
-    height: 24px;
-    background-image: url("{alpona_h_uri}");
-    background-repeat: repeat-x;
-  }}
-  .alpona-left, .alpona-right {{
-    top: 0; bottom: 0;
-    width: 24px;
-    background-image: url("{alpona_v_uri}");
-    background-repeat: repeat-y;
-  }}
-  .alpona-top {{ top: -12px; }}
-  .alpona-bottom {{ bottom: -12px; }}
-  .alpona-left {{ left: -12px; }}
-  .alpona-right {{ right: -12px; }}
-  
-  /* Corner Ornaments */
-  .corner-ornament {{
-    position: absolute;
-    font-family: serif;
-    font-size: 36px;
-    color: #c8960c;
-    z-index: 15;
-    line-height: 1;
-    text-shadow: 0 2px 4px rgba(122,0,48,0.4);
-  }}
-  .corner-tl {{ top: 38px; left: 42px; }}
-  .corner-tr {{ top: 38px; right: 42px; }}
-  .corner-bl {{ bottom: 38px; left: 42px; }}
-  .corner-br {{ bottom: 38px; right: 42px; }}
-
-  /* Content Layout */
-  .cert-content {{
+  /* ── CONTENT LAYOUT ── */
+  .cert-content {{{{
     position: relative;
     z-index: 20;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
-    /* Keep padding inside the Alpona strip */
-    padding: 80px 125px 68px 125px;
+    padding: 85px 130px 65px 130px;
     box-sizing: border-box;
-  }}
+  }}}}
 
   /* Section 1: Header */
-  .header-block {{
+  .header-block {{{{
     text-align: center;
-    margin-top: 10px;
-  }}
-  .main-title {{
+    margin-top: 5px;
+  }}}}
+  .main-title {{{{
     font-family: 'Noto Serif Bengali', serif;
     font-weight: 900;
-    font-size: 64pt;
+    font-size: 62pt;
     color: #7a0030;
     margin: 0;
     line-height: 1.2;
     letter-spacing: normal;
     text-rendering: optimizeLegibility;
     text-shadow: 0 4px 15px rgba(255,250,240,0.95), 0 2px 5px rgba(0,0,0,0.2);
-  }}
-  .organizer {{
+  }}}}
+  .organizer {{{{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 600;
-    font-size: 16pt;
+    font-size: 17pt;
     color: #3a1500;
-    margin: 10px 0 0 0;
+    margin: 12px 0 0 0;
     letter-spacing: normal;
-    text-shadow: 0 1px 5px rgba(255,250,240,1);
-  }}
+    text-shadow: 0 1px 6px rgba(255,250,240,1);
+  }}}}
 
   /* Section 2: Gold Divider */
-  .gold-divider {{
-    width: 65%;
+  .gold-divider {{{{
+    width: 60%;
     height: 2px;
     margin: 0 auto;
     background: linear-gradient(to right, transparent, #f5d060, #c8960c, #f5d060, transparent);
     box-shadow: 0 0 10px rgba(200,150,12,0.5);
-  }}
+  }}}}
 
-  /* Section 3: Body Text box */
-  .body-text-box {{
+  /* Section 3: Body Text */
+  .body-text-box {{{{
     padding: 10px 30px 25px 30px;
     text-align: center;
     font-family: 'Noto Sans Bengali', sans-serif;
-    font-weight: 600; 
-    font-size: 22pt; /* Generous font scale */
+    font-weight: 600;
+    font-size: 22pt;
     color: #120808;
     line-height: 2.2;
     margin: 0 auto;
     width: 95%;
     letter-spacing: normal;
     text-rendering: optimizeLegibility;
-    text-shadow: 0 2px 10px rgba(255,250,240,0.95), 0 0 15px rgba(255,250,240,0.8); /* Better stand-out over artwork */
-  }}
-  .body-text-line-wrapper {{
-    margin-top: 25px; /* Adds critical vertical spacing so huge names comfortably fit */
-  }}
-  .blank {{
+    text-shadow: 0 2px 10px rgba(255,250,240,0.95), 0 0 15px rgba(255,250,240,0.8);
+  }}}}
+  .body-text-line-wrapper {{{{
+    margin-top: 25px;
+  }}}}
+  .blank {{{{
     display: inline-block;
     border-bottom: 3px solid #3a1500;
-    vertical-align: text-bottom; /* Replaced bad transform hack. Sits text beautifully flush with the baseline. */
+    vertical-align: text-bottom;
     text-align: center;
     padding: 0 10px;
     color: #7a0030;
     font-weight: 800;
-  }}
+  }}}}
 
   /* Section 4: Date & Place */
-  .date-place {{
+  .date-place {{{{
     display: flex;
     justify-content: space-between;
-    width: 75%; 
-    margin: 0 auto; 
+    width: 75%;
+    margin: 0 auto;
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 700;
     font-size: 18pt;
     color: #3a1500;
     text-shadow: 0 1px 5px rgba(255,250,240,1);
-  }}
+  }}}}
 
   /* Section 5: Signatures */
-  .signature-block {{
+  .signature-block {{{{
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 25px;
     padding: 0 30px;
-  }}
-  .sig-col {{
+  }}}}
+  .sig-col {{{{
     display: flex;
     flex-direction: column;
     align-items: center;
-  }}
-  /* Add ornament above signature lines */
-  .sig-line-wrapper {{
+  }}}}
+  .sig-line-wrapper {{{{
     position: relative;
-    width: 130px; /* Stronger signature anchor width */
-    margin-bottom: 20px;
+    width: 130px;
+    margin-bottom: 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
-  }}
-  .sig-line-wrapper::before {{
-    content: '✦'; 
+  }}}}
+  .sig-line-wrapper::before {{{{
+    content: '✦';
     color: #c8960c;
     font-size: 14pt;
     position: absolute;
     top: -26px;
     text-shadow: 0 1px 2px rgba(120,0,40,0.4);
-  }}
-  .sig-line {{
+  }}}}
+  .sig-line {{{{
     width: 100%;
-    border-top: 3px solid #7a0030; 
-  }}
-  .sig-role {{
+    border-top: 3px solid #7a0030;
+  }}}}
+  .sig-role {{{{
     font-family: 'Noto Sans Bengali', sans-serif;
     font-weight: 900;
-    font-size: 26pt; /* Gigantic, impossible to miss */
+    font-size: 26pt;
     color: #7a0030;
     letter-spacing: normal;
-    text-shadow: 0 2px 6px rgba(120,0,40,0.4);
-    background: rgba(255, 250, 240, 0.85); /* High-contrast frosting pill */
-    padding: 4px 28px;
+    text-shadow: 0 3px 8px rgba(120,0,40,0.5);
+    background: rgba(255, 250, 240, 0.88);
+    padding: 4px 30px;
     border-radius: 50px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }}
+    margin-top: 4px;
+  }}}}
 
   /* Download Button */
-  .downloadBtn {{
+  .downloadBtn {{{{
     background: linear-gradient(135deg, #c8960c, #f5d060, #c8960c);
     color: #3a1500;
     font-family: 'Noto Sans Bengali', sans-serif;
@@ -357,24 +419,24 @@ html_content = f"""<!DOCTYPE html>
     letter-spacing: 1px;
     transition: transform 0.2s, box-shadow 0.2s;
     z-index: 100;
-  }}
-  .downloadBtn:hover {{
+  }}}}
+  .downloadBtn:hover {{{{
     transform: scale(1.04);
     box-shadow: 0 8px 30px rgba(200,150,12,0.6);
-  }}
+  }}}}
 
-  /* Print Media Query */
-  @media print {{
-    body {{ background: none; padding: 0; }}
-    .downloadBtn, .controls-wrapper {{ display: none; }}
-    .scale-wrapper {{ transform: none !important; width: 297mm; height: 210mm; }}
-    #certificate {{ width: 297mm; height: 210mm; box-shadow: none; }}
-  }}
+  /* Print */
+  @media print {{{{
+    body {{{{ background: none; padding: 0; }}}}
+    .downloadBtn, .controls-wrapper {{{{ display: none; }}}}
+    .scale-wrapper {{{{ transform: none !important; width: 297mm; height: 210mm; }}}}
+    #certificate {{{{ width: 297mm; height: 210mm; }}}}
+  }}}}
 </style>
 </head>
 <body>
 
-  <!-- Customization Toggle UI -->
+  <!-- Toggle UI -->
   <div class="controls-wrapper">
     <button id="btn-ankon" class="toggle-type-btn active" onclick="setCertType('অঙ্কন')">অঙ্কন প্রতিযোগিতা</button>
     <button id="btn-fashion" class="toggle-type-btn" onclick="setCertType('ফ্যাশন')">ফ্যাশন প্রতিযোগিতা</button>
@@ -385,19 +447,25 @@ html_content = f"""<!DOCTYPE html>
       <!-- Backgrounds -->
       <div class="bg-image"></div>
       <div class="bg-vignette"></div>
-      
-      <!-- Logo -->
-      <img src="{logo_data_uri}" class="cert-logo" alt="Logo" />
 
-      <!-- True SVG Alpona Decorative Border Elements -->
+      <!-- Multi-Layer Border System -->
+      <div class="border-outer"></div>
+      <div class="border-cream"></div>
+      <div class="border-inner-gold"></div>
       <div class="alpona-strip">
         <div class="alpona-edge alpona-top"></div>
         <div class="alpona-edge alpona-bottom"></div>
         <div class="alpona-edge alpona-left"></div>
         <div class="alpona-edge alpona-right"></div>
       </div>
-      
-      <!-- Corner Ornaments ❧ -->
+      <div class="border-inner-crimson"></div>
+
+      <!-- Logo (flexbox centered inside wrapper) -->
+      <div class="logo-wrapper">
+        <img src="{logo_data_uri}" alt="Logo" />
+      </div>
+
+      <!-- Corner Ornaments -->
       <div class="corner-ornament corner-tl">❧</div>
       <div class="corner-ornament corner-tr">❧</div>
       <div class="corner-ornament corner-bl">❧</div>
@@ -405,8 +473,8 @@ html_content = f"""<!DOCTYPE html>
 
       <!-- Content -->
       <div class="cert-content">
-        
-        <!-- 1. Header (No subtitle) -->
+
+        <!-- 1. Header -->
         <div class="header-block">
           <div class="main-title">আবার বসন্ত, ২০২৬</div>
           <div class="organizer">পরিচালনায়: ১৬ নম্বর ওয়ার্ড বসন্ত উৎসব কমিটি</div>
@@ -415,23 +483,23 @@ html_content = f"""<!DOCTYPE html>
         <!-- 2. Divider -->
         <div class="gold-divider"></div>
 
-        <!-- 3. Body Text (Fluid Alignment & Massive Widths) -->
+        <!-- 3. Body Text -->
         <div class="body-text-box">
           <div class="body-text-line-wrapper">
-             <span class="blank" id="blankType" style="min-width: 260px;">অঙ্কন</span> প্রতিযোগিতায় <span class="blank" style="min-width: 200px;"></span> বিভাগে <span class="blank" style="min-width: 140px;"></span> স্থানাধিকারী
+            <span class="blank" id="blankType" style="min-width: 260px;">অঙ্কন</span> প্রতিযোগিতায় <span class="blank" style="min-width: 200px;"></span> বিভাগে <span class="blank" style="min-width: 140px;"></span> স্থানাধিকারী
           </div>
           <div class="body-text-line-wrapper">
-             শ্রী/শ্রীমতী <span class="blank" style="min-width: 580px;"></span> কে শংসাপত্র প্রদত্ত হল।
+            শ্রী/শ্রীমতী <span class="blank" style="min-width: 580px;"></span> কে শংসাপত্র প্রদত্ত হল।
           </div>
         </div>
 
-        <!-- 4. Date & Place (CHANGE 5: No underline for Location limit) -->
+        <!-- 4. Date & Place -->
         <div class="date-place">
           <div>তারিখ: <span class="blank" style="min-width: 140px;"></span></div>
           <div>স্থান: <span style="margin-left:8px;">মোংলাপাড়া মাঠ</span></div>
         </div>
 
-        <!-- 5. Signatures (CHANGE 3: Bold, Ornaments) -->
+        <!-- 5. Signatures -->
         <div class="signature-block">
           <div class="sig-col">
             <div class="sig-line-wrapper"><div class="sig-line"></div></div>
@@ -450,42 +518,39 @@ html_content = f"""<!DOCTYPE html>
   <button class="downloadBtn" id="downloadBtn">Download Certificate (PNG)</button>
 
   <script>
-    // JS Logic for Toggle Type
-    function setCertType(typeStr) {{
+    function setCertType(typeStr) {{{{
       document.getElementById('blankType').innerText = typeStr;
-      if (typeStr === 'অঙ্কন') {{
+      if (typeStr === 'অঙ্কন') {{{{
         document.getElementById('btn-ankon').classList.add('active');
         document.getElementById('btn-fashion').classList.remove('active');
-      }} else {{
+      }}}} else {{{{
         document.getElementById('btn-fashion').classList.add('active');
         document.getElementById('btn-ankon').classList.remove('active');
-      }}
-    }}
+      }}}}
+    }}}}
 
-    // Scale the wrapper to fit nicely on the user's screen
-    function resizeCertificate() {{
+    function resizeCertificate() {{{{
       const wrapper = document.getElementById('scaleWrapper');
       const windowWidth = window.innerWidth;
       const windowHeight = window.innerHeight;
       const scaleX = (windowWidth - 40) / 1587;
       const scaleY = (windowHeight - 160) / 1123;
       const scale = Math.min(scaleX, scaleY, 1);
-      wrapper.style.transform = `scale(${{scale}})`;
-      wrapper.style.marginBottom = `-${{1123 * (1 - scale)}}px`;
-    }}
-    
-    window.addEventListener('resize', resizeCertificate);
-    resizeCertificate(); // initial call
+      wrapper.style.transform = `scale(${{{{scale}}}})`;
+      wrapper.style.marginBottom = `-${{{{1123 * (1 - scale)}}}}px`;
+    }}}}
 
-    // Download Logic via html2canvas
-    document.getElementById('downloadBtn').addEventListener('click', async () => {{
+    window.addEventListener('resize', resizeCertificate);
+    resizeCertificate();
+
+    document.getElementById('downloadBtn').addEventListener('click', async () => {{{{
       const btn = document.getElementById('downloadBtn');
       const originalText = btn.innerText;
       btn.innerText = "Generating PNG... (This may take a moment)";
       btn.style.opacity = "0.7";
       btn.style.pointerEvents = "none";
 
-      try {{
+      try {{{{
         const cert = document.getElementById('certificate');
         await document.fonts.ready;
         await new Promise(resolve => setTimeout(resolve, 300));
@@ -493,22 +558,22 @@ html_content = f"""<!DOCTYPE html>
         const isMobile = window.innerWidth <= 768;
         const exportScale = isMobile ? 2.5 : 4;
 
-        const canvas = await html2canvas(cert, {{
+        const canvas = await html2canvas(cert, {{{{
           scale: exportScale,
           useCORS: true,
           backgroundColor: null,
           logging: false,
-          letterRendering: 1, 
-          onclone: function(clonedDoc) {{
+          letterRendering: 1,
+          onclone: function(clonedDoc) {{{{
             const scaleWrap = clonedDoc.getElementById('scaleWrapper');
-            if (scaleWrap) {{
+            if (scaleWrap) {{{{
               scaleWrap.style.transform = 'none';
               scaleWrap.style.marginBottom = '0';
-            }}
-          }}
-        }});
-        
-        canvas.toBlob((blob) => {{
+            }}}}
+          }}}}
+        }}}});
+
+        canvas.toBlob((blob) => {{{{
           if (!blob) throw new Error("Canvas to Blob failed.");
           const blobUrl = URL.createObjectURL(blob);
           const link = document.createElement('a');
@@ -516,21 +581,21 @@ html_content = f"""<!DOCTYPE html>
           link.href = blobUrl;
           document.body.appendChild(link);
           link.click();
-          setTimeout(() => {{ document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }}, 100);
-          
+          setTimeout(() => {{{{ document.body.removeChild(link); URL.revokeObjectURL(blobUrl); }}}}, 100);
+
           btn.innerText = originalText;
           btn.style.opacity = "1";
           btn.style.pointerEvents = "auto";
-        }}, 'image/png', 1.0);
+        }}}}, 'image/png', 1.0);
 
-      }} catch (err) {{
+      }}}} catch (err) {{{{
         console.error(err);
         alert("Error generating PNG. Check console.");
         btn.innerText = originalText;
         btn.style.opacity = "1";
         btn.style.pointerEvents = "auto";
-      }}
-    }});
+      }}}}
+    }}}});
   </script>
 </body>
 </html>
@@ -541,4 +606,3 @@ with open(output_path, "w", encoding="utf-8") as f:
     f.write(html_content)
 
 print(f"File successfully created: {output_path}")
-
